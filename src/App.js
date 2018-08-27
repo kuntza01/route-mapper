@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
+import Map from "./Map";
 import axios from 'axios';
 
-class App extends Component {
+export default class App extends Component {
 
 	constructor() {
 		super();
@@ -17,6 +18,7 @@ class App extends Component {
 	onReset = () => {
 		this.setState({
 			map: "",
+			solvedMap: null,
 			solvedSteps: null
 		});
 	};
@@ -29,7 +31,7 @@ class App extends Component {
 		})
 			.then(response => {
 				this.setState({
-					map: response.data.path.map,
+					solvedMap: response.data.path.map,
 					solvedSteps: response.data.path.step
 				})
 			});
@@ -47,32 +49,35 @@ class App extends Component {
 					<form onSubmit={this.onSubmit}>
 						<div className="form-group">
 							<label>
-								Map data
+								Paste map data here
 							</label>
 							<textarea className="form-control"
-												style={{fontFamily: 'monospace'}}
-												rows="10"
-												onChange={this.onChange}
-												value={this.state.map}/>
+										 onChange={this.onChange}
+										 value={this.state.map}/>
 						</div>
-						{this.state.solvedSteps &&
-						<div className="alert alert-info">
-							Solved in {this.state.solvedSteps} steps!
-						</div>
-						}
-						<div className="text-right">
-							<button type="reset" className="btn btn-link" onClick={this.onReset}>
-								Reset
-							</button>
-							<button type="submit" className="btn btn-success">
-								Solve
-							</button>
+						<div className="row">
+							<div className="col">
+								{this.state.solvedSteps &&
+								<div>
+									Solved in {this.state.solvedSteps} steps!
+								</div>
+								}
+							</div>
+							<div className="col text-right">
+								<button type="reset" className="btn btn-link" onClick={this.onReset}>
+									Reset
+								</button>
+								<button type="submit" className="btn btn-success">
+									Solve
+								</button>
+							</div>
 						</div>
 					</form>
+					{this.state.solvedMap &&
+					<Map map={this.state.solvedMap}/>
+					}
 				</div>
 			</div>
 		);
 	}
 }
-
-export default App;
