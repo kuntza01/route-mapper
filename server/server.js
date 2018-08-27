@@ -8,7 +8,9 @@ app.use('/node_modules', express.static(path.join(__dirname, '../node_modules'))
 app.use(bodyParser.json());
 
 app.post('/api/map', (req, res) => {
-	res.json({path: pathfindingService.shortestPath(req.body.map)});
+	let mapData = req.body.map;
+	mapData = mapData.replace(/x/g, '.');
+	res.json({path: pathfindingService.shortestPath(mapData)});
 });
 
 const port = process.env.PORT || 5000;
