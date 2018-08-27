@@ -9,7 +9,7 @@ app.use(bodyParser.json());
 
 app.post('/api/map', (req, res) => {
 	let mapData = req.body.map;
-	mapData = mapData.replace(/x/g, '.');
+	mapData = mapData.replace(/x/g, '.').trim();
 	res.json({path: pathfindingService.shortestPath(mapData)});
 });
 

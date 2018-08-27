@@ -9,11 +9,16 @@ class App extends Component {
 	}
 
 	onChange = (event) => {
-		this.setState({map: event.target.value});
+		this.setState({
+			map: event.target.value
+		});
 	};
 
 	onReset = () => {
-		this.setState({map: ""})
+		this.setState({
+			map: "",
+			solvedSteps: null
+		});
 	};
 
 	onSubmit = (event) => {
@@ -23,7 +28,10 @@ class App extends Component {
 			map: this.state.map
 		})
 			.then(response => {
-				this.setState({map: response.data.path.map})
+				this.setState({
+					map: response.data.path.map,
+					solvedSteps: response.data.path.step
+				})
 			});
 	};
 
@@ -47,6 +55,11 @@ class App extends Component {
 												onChange={this.onChange}
 												value={this.state.map}/>
 						</div>
+						{this.state.solvedSteps &&
+						<div className="alert alert-info">
+							Solved in {this.state.solvedSteps} steps!
+						</div>
+						}
 						<div className="text-right">
 							<button type="reset" className="btn btn-link" onClick={this.onReset}>
 								Reset
