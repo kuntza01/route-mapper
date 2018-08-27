@@ -1,34 +1,62 @@
 import React, {Component} from 'react';
-import './App.css';
 import axios from 'axios';
 
 class App extends Component {
 
+	constructor() {
+		super();
+		this.state = {map: ""}
+	}
+
 	onChange = (event) => {
-		this.setState({data: event.target.value});
+		this.setState({map: event.target.value});
+	};
+
+	onReset = () => {
+		this.setState({map: ""})
 	};
 
 	onSubmit = (event) => {
 		event.preventDefault();
 
 		axios.post('/api/map', {
-			data: this.state.data
+			map: this.state.map
 		})
-			.then(function (response) {
-				console.log(response);
-			})
-			.catch(function (error) {
-				console.log(error);
+			.then(response => {
+				this.setState({map: response.data.path.map})
 			});
 	};
 
 	render() {
 		return (
-			<div className="App">
-				<form onSubmit={this.onSubmit}>
-					<textarea onChange={this.onChange}/>
-					<button type="submit">Submit</button>
-				</form>
+			<div>
+				<nav className="navbar navbar-dark bg-dark">
+					<div className="container">
+						<span className="navbar-brand mb-0 h1">Route Mapper</span>
+					</div>
+				</nav>
+				<div className="container mt-3">
+					<form onSubmit={this.onSubmit}>
+						<div className="form-group">
+							<label>
+								Map data
+							</label>
+							<textarea className="form-control"
+												style={{fontFamily: 'monospace'}}
+												rows="10"
+												onChange={this.onChange}
+												value={this.state.map}/>
+						</div>
+						<div className="text-right">
+							<button type="reset" className="btn btn-link" onClick={this.onReset}>
+								Reset
+							</button>
+							<button type="submit" className="btn btn-success">
+								Solve
+							</button>
+						</div>
+					</form>
+				</div>
 			</div>
 		);
 	}

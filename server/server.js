@@ -1,12 +1,14 @@
 const express = require('express');
+const path = require('path');
 const bodyParser = require('body-parser');
 const pathfindingService = require('./pathfindingService');
 
 const app = express();
+app.use('/node_modules', express.static(path.join(__dirname, '../node_modules')));
 app.use(bodyParser.json());
 
 app.post('/api/map', (req, res) => {
-	res.json({path: pathfindingService.shortestPath(req.body.data)});
+	res.json({path: pathfindingService.shortestPath(req.body.map)});
 });
 
 const port = process.env.PORT || 5000;
